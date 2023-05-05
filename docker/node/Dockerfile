@@ -24,7 +24,6 @@ RUN apk update \
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-EXPOSE 3000
 EXPOSE 5173
 EXPOSE 4173
 

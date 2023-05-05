@@ -55,6 +55,17 @@ services:
         published: ${HTTP3_PORT:-443}
         protocol: udp
 
+  node:
+    env_file: .env
+    build:
+      context: ./docker/node/
+      args:
+        - HOST_USER=${HOST_USER:-1000}
+        - HOST_USERGROUP=${HOST_USERGROUP:-1000}
+    restart: unless-stopped
+    volumes:
+      - ./:/home/docker
+    command: "yarn dev"
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
