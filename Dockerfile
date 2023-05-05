@@ -31,8 +31,8 @@ WORKDIR /srv/app
 COPY --from=php_extension_installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
 # persistent / runtime deps
-RUN apk add --no-cache acl fcgi file gettext git;
-RUN set -eux; install-php-extensions apcu intl opcache zip;
+RUN apk add --no-cache acl fcgi file gettext git postgresql-dev;
+RUN set -eux; install-php-extensions apcu intl opcache zip gd pgsql redis sodium pdo_pgsql;
 
 # copy config ini files
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -83,7 +83,7 @@ RUN set -eux; \
     if [ -f composer.json ]; then \
 		composer dump-autoload --classmap-authoritative --no-dev; \
 		if [ "$APP_ENV" = 'prod' ]; then \
-			composer dump-env prod \
+			composer dump-env prod; \
 		fi; \
 		composer run-script --no-dev post-install-cmd; \
 		chmod +x bin/console; sync; \
