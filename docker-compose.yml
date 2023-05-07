@@ -39,6 +39,7 @@ services:
       - php_socket:/var/run/php
       - caddy_data:/data
       - caddy_config:/config
+      - ./certs:/etc/caddy/certs
     ports:
       # HTTP
       - target: 80
@@ -55,14 +56,20 @@ services:
 
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-db_name}
       # You should definitely change the password in production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       POSTGRES_USER: ${POSTGRES_USER:-user}
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
 
   node:
     env_file: .env
+    ports:
+      - 5173:5173
     build:
       context: ./docker/node/
       args:
@@ -72,6 +79,12 @@ services:
     volumes:
       - ./:/home/docker
     command: "yarn dev"
+
+  mailer:
+    image: mailhog/mailhog:latest
+    ports:
+      - 1025
+      - "8025:8025"
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
@@ -80,5 +93,6 @@ volumes:
   php_socket:
   caddy_data:
   caddy_config:
+  db-data:
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###

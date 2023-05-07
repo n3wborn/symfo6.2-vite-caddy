@@ -1,22 +1,22 @@
 import { defineConfig } from "vite";
 import symfonyPlugin from "vite-plugin-symfony";
-import mkcert from "vite-plugin-mkcert";
-/* if you're using React */
-// import react from '@vitejs/plugin-react';
+import fs from "fs";
 
 export default defineConfig({
-  plugins: [
-    /* react(), // if you're using React */
-    symfonyPlugin(),
-    mkcert(),
-  ],
+  plugins: [symfonyPlugin()],
   root: ".",
   base: "/build/",
   server: {
-    https: true,
-    cors: true,
+    https: {
+      key: fs.readFileSync("certs/key.pem"),
+      cert: fs.readFileSync("certs/cert.pem"),
+    },
     host: true,
-    origin: "https://node.symfo.localhost:5173",
+    cors: true,
+    hmr: {
+      host: "node.symfo.localhost",
+      protocol: "wss",
+    },
   },
   build: {
     manifest: true,
