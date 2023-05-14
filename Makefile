@@ -19,11 +19,16 @@ help: ## Outputs this help screen
 
 ## —— Docker 🐳 ————————————————————————————————————————————————————————————————
 build: ## Builds the Docker images
-	@$(DOCKER_COMP) build --no-cache
-	# @$(DOCKER_COMP) build --pull --no-cache
+	@$(DOCKER_COMP) build
 
-up: ## Start the docker hub in detached mode (no logs)
-	@$(DOCKER_COMP) up --detach
+build-pull-cache: ## Pull images, don't use cache and build the Docker image
+	@$(DOCKER_COMP) build --pull --no-cache
+
+up: ## Start the docker hub
+	@$(DOCKER_COMP) up --force-recreate --remove-orphans
+
+stop: ## Stop containers
+	@$(DOCKER_COMP) stop
 
 start: build up ## Build and start the containers
 
