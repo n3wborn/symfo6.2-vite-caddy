@@ -1,32 +1,32 @@
-# Symfony Docker
+# Symfony 6.2 Vite Caddy
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html), HTTP/3 and HTTPS support.
 
-![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
+1. What ?
 
-## Getting Started
+    - Symfony 6.2 based on [Symfony Docker](https://github.com/dunglas/symfony-docker)
 
-1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-2. Run `docker compose build --pull --no-cache` to build fresh images
-3. Run `docker compose up` (the logs will be displayed in the current shell)
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+2. Why ?
 
-## Features
+    - to replace my previous apache/nginx by Caddy for Symfony projects
+    - to add a Node container to Symfony Docker
+    - to replace Webpack Encore by Vite (using "pentatrion/vite-bundle")
+    - to have a light/fast asset/template builder with HMR
+    - to have something ready for dev and prod
+    - to play and learn !
+    - and surely more I don't think of right now
 
-* Production, development and CI ready
-* [Installation of extra Docker Compose services](docs/extra-services.md) with Symfony Flex
-* Automatic HTTPS (in dev and in prod!)
-* HTTP/2, HTTP/3 and [Preload](https://symfony.com/doc/current/web_link.html) support
-* Built-in [Mercure](https://symfony.com/doc/current/mercure.html) hub
-* [Vulcain](https://vulcain.rocks) support
-* Native [XDebug](docs/xdebug.md) integration
-* Just 2 services (PHP FPM and Caddy server)
-* Super-readable configuration
+## Install
 
-**Enjoy!**
+```sh
+clone https://github.com/n3wborn/symfo6.2-vite-caddy
+cd symfo6.2-vite-caddy
+make build && make up
+```
 
-## Docs
+
+## Symfony Docker Docs
+
+(Keep in mind those can be incompatible with this repo)
 
 1. [Build options](docs/build.md)
 2. [Using Symfony Docker with an existing project](docs/existing-project.md)
@@ -43,4 +43,4 @@ Symfony Docker is available under the MIT License.
 
 ## Credits
 
-Created by [Kévin Dunglas](https://dunglas.fr), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+Symfony Docker is created by [Kévin Dunglas](https://dunglas.fr), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
