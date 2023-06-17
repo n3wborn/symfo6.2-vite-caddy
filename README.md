@@ -23,6 +23,12 @@ cd symfo6.2-vite-caddy
 make build && make up
 ```
 
+For HTTPS to be fully operational **you need to accept certificates on "both sides"**.
+
+1. Go to the main url of the project (https://symfo.localhost/) and accept certificate
+2. Got to the url used by vite (https://node.symfo.localhost:5173/) and accept certificate
+
+Now everything should be fine
 
 ## Symfony Docker Docs
 
