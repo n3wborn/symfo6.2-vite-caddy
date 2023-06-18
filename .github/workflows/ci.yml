@@ -12,10 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@master
-        with:
-          dockerfile: Dockerfile
-          ignore: DL3007,DL3018 # Ignore using latest on mlocati/php-extension-installer & version in apk add
+        uses: hadolint/hadolint-action@v3.1.0
   build:
     name: Docker build
     runs-on: ubuntu-latest
@@ -24,8 +21,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Pull images
         run: docker compose pull
+      - name: Build services
+        run: docker compose build --no-cache
       - name: Start services
-        run: docker compose up --build -d
+        run: docker compose up -d
       - name: Wait for services
         run: |
           while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker compose ps -q php)")"; do

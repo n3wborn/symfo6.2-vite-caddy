@@ -4,20 +4,11 @@
 # https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
 # https://docs.docker.com/compose/compose-file/#target
 
-#################### COMPOSER ###################
-FROM composer/composer:2-bin AS composer
-
-
-############ PHP EXTENSION INSTALLER ############
-FROM mlocati/php-extension-installer:latest AS php_extension_installer
-
 ################ APP CADDY BUILDER ################
-FROM caddy:2.6-builder-alpine AS app_caddy_builder
+FROM caddy:2.7-builder-alpine AS app_caddy_builder
 
-RUN xcaddy build \
-	--with github.com/dunglas/mercure \
+RUN xcaddy build v2.6.4 \
 	--with github.com/dunglas/mercure/caddy \
-	--with github.com/dunglas/vulcain \
 	--with github.com/dunglas/vulcain/caddy
 
 ############### APP PHP PROD ###############
@@ -28,11 +19,13 @@ ENV APP_ENV=prod
 WORKDIR /srv/app
 
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
-COPY --from=php_extension_installer --link /usr/bin/install-php-extensions /usr/local/bin/
+# hadolint ignore=DL3007
+COPY --from=mlocati/php-extension-installer:latest --link /usr/bin/install-php-extensions /usr/local/bin/
 
 # persistent / runtime deps
+# hadolint ignore=DL3018
 RUN apk add --no-cache acl fcgi file gettext git postgresql-dev;
-RUN set -eux; install-php-extensions apcu intl opcache zip gd pgsql redis sodium pdo_pgsql;
+RUN set -eux; install-php-extensions apcu intl opcache zip gd pgsql redis pdo_pgsql;
 
 # copy config ini files
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -63,7 +56,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 # copy composer exec
-COPY --from=composer --link /composer /usr/bin/composer
+COPY --from=composer/composer:2-bin --link /composer /usr/bin/composer
 
 # prevent the reinstallation of vendors at every changes in the source code
 COPY --link composer.* symfony.* ./
@@ -114,7 +107,7 @@ RUN set -eux; install-php-extensions xdebug;
 RUN rm -f .env.local.php
 
 # Caddy image
-FROM caddy:2.6-alpine AS app_caddy
+FROM caddy:2-alpine AS app_caddy
 
 WORKDIR /srv/app
 
