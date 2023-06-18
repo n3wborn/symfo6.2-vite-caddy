@@ -4,13 +4,6 @@
 # https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
 # https://docs.docker.com/compose/compose-file/#target
 
-#################### COMPOSER ###################
-FROM composer/composer:2-bin AS composer
-
-
-############ PHP EXTENSION INSTALLER ############
-FROM mlocati/php-extension-installer:latest AS php_extension_installer
-
 ################ APP CADDY BUILDER ################
 FROM caddy:2.7-builder-alpine AS app_caddy_builder
 
@@ -27,7 +20,7 @@ WORKDIR /srv/app
 
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 # hadolint ignore=DL3007
-COPY --from=php_extension_installer --link /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=mlocati/php-extension-installer:latest --link /usr/bin/install-php-extensions /usr/local/bin/
 
 # persistent / runtime deps
 # hadolint ignore=DL3018
