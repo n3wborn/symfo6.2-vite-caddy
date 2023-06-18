@@ -26,9 +26,11 @@ ENV APP_ENV=prod
 WORKDIR /srv/app
 
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
+# hadolint ignore=DL3007
 COPY --from=php_extension_installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
 # persistent / runtime deps
+# hadolint ignore=DL3018
 RUN apk add --no-cache acl fcgi file gettext git postgresql-dev;
 RUN set -eux; install-php-extensions apcu intl opcache zip gd pgsql redis pdo_pgsql;
 
