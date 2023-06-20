@@ -1,5 +1,6 @@
 # Symfony 6.2 Vite Caddy
 
+![CI](https://github.com/n3wborn/symfo6.2-vite-caddy/workflows/CI/badge.svg)
 
 1. What ?
 
