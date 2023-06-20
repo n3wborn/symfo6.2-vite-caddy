@@ -28,6 +28,17 @@ For HTTPS to be fully operational **you need to accept certificates on "both sid
 1. Go to the main url of the project (https://symfo.localhost/) and accept certificate
 2. Got to the url used by vite (https://node.symfo.localhost:5173/) and accept certificate
 
+Or, simply follow [TLS certificates](docs/tls.md) doc:
+
+```bash
+# Mac
+$ docker cp $(docker compose ps -q caddy):/data/caddy/pki/authorities/local/root.crt /tmp/root.crt && sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain /tmp/root.crt
+# Linux
+$ docker cp $(docker compose ps -q caddy):/data/caddy/pki/authorities/local/root.crt /usr/local/share/ca-certificates/root.crt && sudo update-ca-certificates
+# Windows
+$ docker compose cp caddy:/data/caddy/pki/authorities/local/root.crt %TEMP%/root.crt && certutil -addstore -f "ROOT" %TEMP%/root.crt
+```
+
 Now everything should be fine
 
 ## Symfony Docker Docs
